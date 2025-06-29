@@ -5,17 +5,13 @@ use ieee.numeric_std.all;
 entity maxadc is
 
     port(clk,datain,reset  :in std_logic;
-                      chs  :in std_logic_vector(1 downto 0);
-        sclk,csel,cs,busy  :out std_logic:='0';
+
         dataout1,dataout2  :out signed(15 downto 4));
 end maxadc;
 
 architecture behavioral of maxadc is
 
-   signal clkcount         : integer range 0 to 51:= 0;
-   signal sck,bs,selec     : std_logic:='0';
-   signal datacount        : integer range 16 downto 0:= 16;
-   signal datareg          : signed(15 downto 4):="000000000000";
+
  
 begin
     sclk<=sck;
@@ -62,12 +58,6 @@ begin
                     if  (datacount<=16 and datacount>15) then
                         bs<='0';
                         cs<='0';  
-                  elsif (datacount<=15 and datacount>=4) then
-                        datareg(datacount)<=datain;
-                        bs<='1';
-                        cs<='0';
-                  elsif  (datacount<4 and datacount>=2) then
-                        cs<='1'; 
                         bs<='0';
                  elsif (datacount<=1 and sck='1') then
                        cs<='0';
@@ -86,9 +76,7 @@ begin
                       datacount<=datacount-1;
                         if datacount=1 then
                         datacount<=16;
-                         if selec='0' then
-                         dataout1<=datareg;
-                        else
+
                          dataout2<=datareg;
                       end if;                            
                    end if;
@@ -114,9 +102,6 @@ begin
                        selec<='0';
                  elsif chs="01" then
                        selec<='1';
-                 elsif chs<="10" then
-                     if datacount=7 then
-                      selec <= (not selec);
                     end if;
                  else
                        selec<='0';
