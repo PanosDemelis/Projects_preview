@@ -1,24 +1,3 @@
-#include <avr/io.h>
-#include <math.h>
-#include <inttypes.h>
-#include <avr/wdt.h>
-#include <avr/eeprom.h>
-#include <avr/interrupt.h>
-#include <stdlib.h>
-
-#define F_CPU 10000000UL
-#define pwm1 OCR1A
-#define pwm2 OCR1B
-#define period 49
-
-int x[51]= {10,43,74,105,136,167,198,228,258,289,319,348,377,406,434,461,489,516,542,568,593,617,641,664,687,709,730,750,770,789,807,824,851,856,871,
-885,898,910,921,931,940,948,956,962,967,972,975,978,979,979,979};
-int z[51]={3,6,9,12,19,22,25,28,31,34,37,40,43,45,48,51,54,56,59,61,64,66,68,70,73,75,77,79,81,83,84,86,88,89,90,92,93,
-94,95,96,97,98,98,99,99,99,99,99,99,99};
-
-uint16_t EEMEM h;
-uint16_t a,d,e,f,g,i;
-int c;
 
 int main(void)
 {
@@ -167,27 +146,5 @@ ISR(TIMER1_OVF_vect)                               /**interrupt routine when TOV
                  a=3;
 
                }
-        }
-
-    else if(a==3)            /*after 150th pulse the second halfwave falls*/
-        {
-          if(c+x[f-g]<=0)
-            {
-              pwm2=0;
-            }
-        else
-            {
-              pwm2=c+x[f-g];
-            }
-
-           g++;
-             if(g==50)
-               {
-                 a=0;
-                 d=0;
-                 e=0;
-                 PORTD &= ~1<<2;
-               }
-        }
-  wdt_reset();
+wdt_reset();
 }
